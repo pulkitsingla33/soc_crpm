@@ -1,0 +1,6 @@
+assign pin=test_mode_i 	test_function= +TI; 	# test_mode
+assign pin=por_ni 	test_function= +SC; 	# test_mode
+assign pin=scan_en 	test_function= +SE; 	# shift_enable
+assign pin=clk_ref_i 	test_function= -ES; 	
+assign pin=scan_in 	test_function= SI0;
+assign pin=scan_out 	test_function= SO0;

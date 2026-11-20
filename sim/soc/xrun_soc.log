@@ -1,0 +1,423 @@
+xrun(64): 22.09-s003: (c) Copyright 1995-2022 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	22.09-s003: Started on Nov 20, 2026 at 13:21:40 IST
+xrun
+	-64bit
+	-sv
+	-timescale 1ns/1ps
+	-access +r
+	-nowarn DSEMEL
+	-nowarn DSEM2009
+	-svseed 1
+	-f ../../scripts/crpm_rtl.f
+		../../rtl/crpm_pkg.sv
+		../../rtl/crpm_cells.sv
+		../../rtl/crpm_rst_ctrl.sv
+		../../rtl/crpm_pmu.sv
+		../../rtl/crpm_regs.sv
+		../../rtl/crpm_top.sv
+	-f ../../scripts/ibex.f
+		+incdir+../../ibex/rtl
+		+incdir+../../ibex/shared/rtl
+		+incdir+../../ibex/vendor/lowrisc_ip/ip/prim/rtl
+		+incdir+../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl
+		+incdir+../../ibex/vendor/lowrisc_ip/dv/sv/dv_utils
+		../../ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_pkg.sv
+		../../ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_util_pkg.sv
+		../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_ram_1p_pkg.sv
+		../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_buf.sv
+		../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_clock_gating.sv
+		../../ibex/rtl/ibex_pkg.sv
+		../../ibex/rtl/ibex_cheriot_pkg.sv
+		../../ibex/rtl/ibex_alu.sv
+		../../ibex/rtl/ibex_compressed_decoder.sv
+		../../ibex/rtl/ibex_controller.sv
+		../../ibex/rtl/ibex_counter.sv
+		../../ibex/rtl/ibex_csr.sv
+		../../ibex/rtl/ibex_cs_registers.sv
+		../../ibex/rtl/ibex_decoder.sv
+		../../ibex/rtl/ibex_ex_block.sv
+		../../ibex/rtl/ibex_fetch_fifo.sv
+		../../ibex/rtl/ibex_id_stage.sv
+		../../ibex/rtl/ibex_if_stage.sv
+		../../ibex/rtl/ibex_load_store_unit.sv
+		../../ibex/rtl/ibex_multdiv_fast.sv
+		../../ibex/rtl/ibex_multdiv_slow.sv
+		../../ibex/rtl/ibex_pmp.sv
+		../../ibex/rtl/ibex_prefetch_buffer.sv
+		../../ibex/rtl/ibex_wb_stage.sv
+		../../ibex/rtl/ibex_core.sv
+		../../ibex/rtl/ibex_register_file_ff.sv
+		../../ibex/rtl/ibex_register_file_fpga.sv
+		../../ibex/rtl/ibex_register_file_latch.sv
+		../../ibex/rtl/ibex_lockstep.sv
+		../../ibex/rtl/ibex_trvk.sv
+		../../ibex/rtl/ibex_top.sv
+	-f ../../scripts/soc_rtl.f
+		../../rtl/soc_core_pd.sv
+		../../rtl/soc_ram.sv
+		../../rtl/soc_ret_regs.sv
+		../../rtl/soc_top.sv
+	../../tb/crpm_sva.sv
+	../../tb/pwr_switch_model.sv
+	../../tb/soc_tb.sv
+	-top soc_tb
+	+FW=fw.hex
+	-l xrun_soc.log
+
+   User defined plus("+") options:
+	+FW=fw.hex
+
+file: ../../rtl/crpm_cells.sv
+	module worklib.crpm_rst_sync:sv
+		errors: 0, warnings: 0
+	module worklib.crpm_sync:sv
+		errors: 0, warnings: 0
+	module worklib.crpm_clk_gate:sv
+		errors: 0, warnings: 0
+	module worklib.crpm_clk_en_gen:sv
+		errors: 0, warnings: 0
+	module worklib.crpm_iso_cell:sv
+		errors: 0, warnings: 0
+file: ../../rtl/crpm_rst_ctrl.sv
+	module worklib.crpm_rst_ctrl:sv
+		errors: 0, warnings: 0
+file: ../../rtl/crpm_pmu.sv
+	module worklib.crpm_pmu:sv
+		errors: 0, warnings: 0
+file: ../../rtl/crpm_regs.sv
+	module worklib.crpm_regs:sv
+		errors: 0, warnings: 0
+file: ../../rtl/crpm_top.sv
+	module worklib.crpm_top:sv
+		errors: 0, warnings: 0
+file: ../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_buf.sv
+	module worklib.prim_buf:sv
+		errors: 0, warnings: 0
+file: ../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_clock_gating.sv
+	module worklib.prim_clock_gating:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_alu.sv
+	module worklib.ibex_alu:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_compressed_decoder.sv
+	module worklib.ibex_compressed_decoder:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_controller.sv
+	module worklib.ibex_controller:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_counter.sv
+	module worklib.ibex_counter:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_csr.sv
+	module worklib.ibex_csr:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_cs_registers.sv
+	module worklib.ibex_cs_registers:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_decoder.sv
+	module worklib.ibex_decoder:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_ex_block.sv
+	module worklib.ibex_ex_block:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_fetch_fifo.sv
+	module worklib.ibex_fetch_fifo:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_id_stage.sv
+	module worklib.ibex_id_stage:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_if_stage.sv
+	module worklib.ibex_if_stage:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_load_store_unit.sv
+	module worklib.ibex_load_store_unit:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_multdiv_fast.sv
+	module worklib.ibex_multdiv_fast:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_multdiv_slow.sv
+	module worklib.ibex_multdiv_slow:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_pmp.sv
+	module worklib.ibex_pmp:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_prefetch_buffer.sv
+	module worklib.ibex_prefetch_buffer:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_wb_stage.sv
+	module worklib.ibex_wb_stage:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_core.sv
+	module worklib.ibex_core:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_register_file_ff.sv
+	module worklib.ibex_register_file_ff:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_register_file_fpga.sv
+	module worklib.ibex_register_file_fpga:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_register_file_latch.sv
+	module worklib.ibex_register_file_latch:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_lockstep.sv
+	module worklib.ibex_lockstep:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_trvk.sv
+	module worklib.ibex_trvk:sv
+		errors: 0, warnings: 0
+file: ../../ibex/rtl/ibex_top.sv
+	module worklib.ibex_top:sv
+		errors: 0, warnings: 0
+file: ../../rtl/soc_core_pd.sv
+	module worklib.soc_core_pd:sv
+		errors: 0, warnings: 0
+file: ../../rtl/soc_ram.sv
+	module worklib.soc_ram:sv
+		errors: 0, warnings: 0
+file: ../../rtl/soc_ret_regs.sv
+	module worklib.soc_ret_regs:sv
+		errors: 0, warnings: 0
+file: ../../rtl/soc_top.sv
+	module worklib.soc_top:sv
+		errors: 0, warnings: 0
+file: ../../tb/crpm_sva.sv
+	module worklib.crpm_sva:sv
+		errors: 0, warnings: 0
+file: ../../tb/pwr_switch_model.sv
+	module worklib.pwr_switch_model:sv
+		errors: 0, warnings: 0
+file: ../../tb/soc_tb.sv
+	module worklib.soc_tb:sv
+		errors: 0, warnings: 0
+xmvlog: *W,SPDUSD: Include directory ../../ibex/rtl given but not used.
+xmvlog: *W,SPDUSD: Include directory ../../ibex/shared/rtl given but not used.
+xmvlog: *W,SPDUSD: Include directory ../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl given but not used.
+	Total errors/warnings found outside modules and primitives:
+		errors: 0, warnings: 3
+	Elaborating the design hierarchy:
+		Caching library 'worklib' ....... Done
+	Top level design units:
+		$unit_0x7c131e7e
+		crpm_pkg
+		ibex_pkg
+		prim_ram_1p_pkg
+		ibex_cheriot_pkg
+		prim_secded_pkg
+		soc_tb
+	Building instance overlay tables: ....
+            pending_dside_accesses_shifted[i] = pending_dside_accesses_q[i + 1];
+                                                                       |
+xmelab: *W,BNDASW (/home/2021hd402588g/cadence_chipin_work/soc_crpm_project/ibex/rtl/ibex_top.sv,1454|71): Bit-select or part-select index out of declared bounds in the sensitivity list of always block.
+................ Done
+	Generating native compiled code:
+		worklib.pwr_switch_model:sv <0x139a15ff>
+			streams:   2, words:   855
+		worklib.soc_ret_regs:sv <0x18391572>
+			streams:  11, words:  5984
+		worklib.soc_ram:sv <0x61ad3592>
+			streams:  10, words:  5645
+		worklib.crpm_iso_cell:sv <0x1497ed2a>
+			streams:   1, words:   523
+		worklib.ibex_csr:sv <0x160e4e72>
+			streams:   9, words:  5241
+		worklib.ibex_csr:sv <0x3d43023c>
+			streams:   9, words:  5164
+		worklib.ibex_counter:sv <0x27df62ca>
+			streams:   6, words:  3970
+		worklib.ibex_counter:sv <0x16325c84>
+			streams:   6, words:  3804
+		worklib.ibex_csr:sv <0x5be5ddb0>
+			streams:   9, words:  5180
+		worklib.ibex_csr:sv <0x11b08494>
+			streams:   9, words:  5161
+		worklib.ibex_csr:sv <0x2aa249c4>
+			streams:   9, words:  5236
+		worklib.ibex_csr:sv <0x3ec8cd91>
+			streams:   9, words:  5164
+		worklib.ibex_csr:sv <0x036c6e8d>
+			streams:   9, words:  5182
+		worklib.ibex_csr:sv <0x00314460>
+			streams:   9, words:  5152
+		worklib.ibex_csr:sv <0x61acc8f7>
+			streams:   9, words:  5248
+		worklib.ibex_wb_stage:sv <0x4d638e59>
+			streams:  23, words: 10948
+		worklib.ibex_ex_block:sv <0x7c369273>
+			streams:  30, words: 11466
+		worklib.ibex_controller:sv <0x6efe27b7>
+			streams: 100, words: 94912
+		worklib.ibex_decoder:sv <0x78aacdbc>
+			streams:  24, words: 55305
+		worklib.ibex_compressed_decoder:sv <0x5836e6f5>
+			streams:  63, words: 81273
+		worklib.ibex_if_stage:sv <0x0acac540>
+			streams: 118, words: 60803
+		worklib.prim_buf:sv <0x45b94030>
+			streams:   2, words:   386
+		worklib.prim_clock_gating:sv <0x3c5db088>
+			streams:   2, words:   568
+		worklib.crpm_sva:sv <0x1c8357fe>
+			streams:  70, words: 51239
+		worklib.crpm_clk_gate:sv <0x64e379bb>
+			streams:   2, words:   568
+		worklib.crpm_clk_en_gen:sv <0x6597627d>
+			streams:   8, words:  3373
+		worklib.crpm_regs:sv <0x1d0a285a>
+			streams:  46, words: 22497
+		worklib.crpm_pmu:sv <0x68838ada>
+			streams:  13, words: 11140
+		worklib.crpm_sync:sv <0x76914ce0>
+			streams:   3, words:   672
+		worklib.crpm_rst_ctrl:sv <0x1c9cd119>
+			streams:  11, words:  5494
+		worklib.crpm_rst_sync:sv <0x6da9bdf4>
+			streams:   3, words:   787
+		worklib.crpm_sync:sv <0x2e3bf983>
+			streams:   3, words:   672
+		worklib.soc_tb:sv <0x245e4396>
+			streams:  57, words: 49576
+		worklib.ibex_alu:sv <0x7a833b14>
+			streams:  25, words: 29018
+		worklib.ibex_top:sv <0x4e58742b>
+			streams: 413, words: 339798
+		worklib.soc_top:sv <0x6d4f7bf8>
+			streams:  77, words: 26337
+		worklib.ibex_fetch_fifo:sv <0x4dd1757a>
+			streams:  53, words: 31566
+		worklib.ibex_prefetch_buffer:sv <0x6ac855f8>
+			streams:  39, words: 13963
+		worklib.ibex_register_file_ff:sv <0x75dbac01>
+			streams:  12, words:  4419
+		worklib.crpm_top:sv <0x3e44c80f>
+			streams:  85, words: 22437
+		worklib.soc_core_pd:sv <0x1a95c661>
+			streams:  15, words:  8844
+		worklib.ibex_core:sv <0x180ea530>
+			streams: 423, words: 153403
+		worklib.ibex_cs_registers:sv <0x68662e25>
+			streams: 127, words: 118202
+		worklib.ibex_id_stage:sv <0x36f6ec05>
+			streams: 346, words: 223847
+		worklib.ibex_load_store_unit:sv <0x404d86b3>
+			streams: 114, words: 86369
+		worklib.ibex_multdiv_fast:sv <0x51fb0ed8>
+			streams:  60, words: 60494
+            pending_dside_accesses_shifted[i] = pending_dside_accesses_q[i + 1];
+                                                                       |
+xmelab: *W,BNDASW (/home/2021hd402588g/cadence_chipin_work/soc_crpm_project/ibex/rtl/ibex_top.sv,1454|71): Bit-select or part-select index out of declared bounds in the sensitivity list of always block.
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                  Instances  Unique
+		Modules:                 73      36
+		Verilog packages:         5       5
+		Registers:             2966    3163
+		Scalar wires:          1434       -
+		Expanded wires:          16       1
+		Vectored wires:         989       -
+		Named events:           156     168
+		Always blocks:          870     915
+		Initial blocks:         189     203
+		Clocking blocks:          1       1
+		Parallel blocks:          5       5
+		Cont. assignments:      767    1145
+		Pseudo assignments:     766     721
+		Assertions:             177     191
+		Compilation units:        1       1
+		Simulation timescale:   1ps
+	Writing initial simulation snapshot: worklib.soc_tb:sv
+Loading snapshot worklib.soc_tb:sv .................... Done
+SVSEED set from command line: 1
+xcelium> source /opt/cadence/XCELIUM2209/tools/xcelium/files/xmsimrc
+xcelium> run
+[SOC_RAM] loaded firmware image 'fw.hex'
+[0] PMU -> PM_WK_PWRON
+[103000] TB: POR released
+[305000] PMU -> PM_WK_RSTREL
+[325000] PMU -> PM_WK_DEISO
+[345000] PMU -> PM_WK_CLKON
+[355000] TB_CHECK ok : periph reset released >= 8 cycles after sys reset
+[365000] PMU -> PM_RUN
+[445000] TB_CHECK ok : core reset released >= 8 cycles after periph reset
+[645000] ---------------- FW stage 0 ----------------
+[1595000] TB_CHECK ok : core clock /2 : period 20000 (expected 20000)
+[5495000] TB_CHECK ok : core clock /4 : period 40000 (expected 40000)
+[13295000] TB_CHECK ok : core clock /8 : period 80000 (expected 80000)
+[28575000] TB_CHECK ok : periph clock /4 : period 40000 (expected 40000)
+[31015000] ---------------- FW stage 1 ----------------
+[31225000] PMU -> PM_IDLE
+[34185000] PMU -> PM_RUN
+[35035000] ---------------- FW stage 2 ----------------
+[35385000] PMU -> PM_SLP_CLKOFF
+[35405000] PMU -> PM_SLP_ISO
+[35425000] PMU -> PM_SLP_SAVE
+[35445000] PMU -> PM_SLP_RST
+[35465000] PMU -> PM_SLP_PWROFF
+[35575000] PMU -> PM_SLEEP
+[39345000] PMU -> PM_WK_PWRON
+[39525000] PMU -> PM_WK_RESTORE
+[39545000] PMU -> PM_WK_RSTREL
+[39555000] TB_CHECK ok : core reset released after power-up (wake)
+[39565000] PMU -> PM_WK_DEISO
+[39585000] PMU -> PM_WK_CLKON
+[39605000] PMU -> PM_RUN
+[39825000] ---------------- FW stage 3 ----------------
+[41165000] PMU -> PM_SLP_CLKOFF
+[41185000] PMU -> PM_SLP_ISO
+[41205000] PMU -> PM_SLP_SAVE
+[41225000] PMU -> PM_SLP_RST
+[41245000] PMU -> PM_SLP_PWROFF
+[41355000] PMU -> PM_SLEEP
+[41355000] TB: core domain is OFF (DEEP), waiting before ext wake
+[45555000] TB_CHECK ok : peripheral domain frozen in DEEP sleep
+[45555000] TB_CHECK ok : masked wake-up timer did not wake the SoC
+[45555000] TB_CHECK ok : core domain power switch is OFF in DEEP sleep
+[45575000] PMU -> PM_WK_PWRON
+[45755000] PMU -> PM_WK_RESTORE
+[45775000] PMU -> PM_WK_RSTREL
+[45785000] TB_CHECK ok : core reset released after power-up (wake)
+[45795000] PMU -> PM_WK_DEISO
+[45815000] PMU -> PM_WK_CLKON
+[45835000] PMU -> PM_RUN
+[46085000] ---------------- FW stage 4 ----------------
+[69675000] PMU -> PM_WK_PWRON
+[69865000] PMU -> PM_WK_RSTREL
+[69885000] PMU -> PM_WK_DEISO
+[69905000] PMU -> PM_WK_CLKON
+[69915000] TB_CHECK ok : periph reset released >= 8 cycles after sys reset
+[69925000] PMU -> PM_RUN
+[70005000] TB_CHECK ok : core reset released >= 8 cycles after periph reset
+[70295000] ---------------- FW stage 5 ----------------
+[74025000] PMU -> PM_WK_PWRON
+[74215000] PMU -> PM_WK_RSTREL
+[74235000] PMU -> PM_WK_DEISO
+[74255000] PMU -> PM_WK_CLKON
+[74265000] TB_CHECK ok : periph reset released >= 8 cycles after sys reset
+[74275000] PMU -> PM_RUN
+[74355000] TB_CHECK ok : core reset released >= 8 cycles after periph reset
+[74675000] ---------------- FW stage 6 ----------------
+[75425000] TB: pulsing ext_rst_n
+[75455000] PMU -> PM_WK_PWRON
+[75935000] PMU -> PM_WK_RSTREL
+[75955000] PMU -> PM_WK_DEISO
+[75975000] PMU -> PM_WK_CLKON
+[75985000] TB_CHECK ok : periph reset released >= 8 cycles after sys reset
+[75995000] PMU -> PM_RUN
+[76075000] TB_CHECK ok : core reset released >= 8 cycles after periph reset
+[76425000] ---------------- FW stage 7 ----------------
+[76985000] PMU -> PM_IDLE
+[77385000] TB_CHECK ok : no core clock edge while IDLE
+[77385000] TB: pulsing ext_irq[0]
+[77405000] PMU -> PM_RUN
+[77635000] FW reported PASS
+[77835000] TB_CHECK ok : power-down X model observed behind isolation cells
+
+==================================================================
+ SoC CRPM test : 19 checks, 0 errors, final FW stage 7
+ LP_STATS: idle entries=1 sleep entries=0
+ RESULT: *** TEST PASSED ***
+==================================================================
+Simulation complete via $finish(1) at time 77835 NS + 0
+/home/2021hd402588g/cadence_chipin_work/soc_crpm_project/tb/soc_tb.sv:250     $finish;
+xcelium> exit
+TOOL:	xrun(64)	22.09-s003: Exiting on Nov 20, 2026 at 13:21:42 IST  (total: 00:00:02)

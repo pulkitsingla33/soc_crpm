@@ -1,0 +1,499 @@
+2026/11/20 13:30:58 WARNING (/opt/cadence/MODUS231/tools.lnx86/bin/cdnsEnvCheck): This OS does not appear to be a Cadence supported Linux configuration. For more info, please run <cdsroot>/tools/bin/checkSysConf <productId>
+Starting Modus DFT Software Solution Tcl UI.
+Type "exit" to return to your previous environment.
+Only command-line mode will be available during this Modus session.
+
+ 
+Copyright (C) 2002-2023 Cadence Design Systems Inc. All Rights Reserved. 
+Cadence and the Cadence logo are registered trademarks and Modus is a trademark 
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+Type 'help legal_notices' for third party license notices. 
+
+Version : 23.12-s005_1, built Aug 15 2024 (linux26_64)
+Options : -file modus_atpg.tcl
+Date    : Fri, November 20 13:31:02 2026
+Host    : C2.goa.bits-pilani.ac.in (x86_64 Linux 4.18.0-553.37.1.el8_10.x86_64) (32*Intel(R) Xeon(R) Gold 6430 61440KB)
+OS      : Rocky Linux release 8.10 (Green Obsidian)
+No DISPLAY environment variable set.
+GUI mode requires a valid DISPLAY.
+
+#@ Processing -files option
+@modus:root:/ 1>  source modus_atpg.tcl
+#@ Begin verbose source modus_atpg.tcl
+@file(modus_atpg.tcl) 5: set GSC /opt/cadence/FOUNDRY/lan/flow/t1u1/reference_libs/GPDK045/gsclib045_svt_v4.4/gsclib045
+@file(modus_atpg.tcl) 6: set fh [open out/atpg/runmodus.atpg.tcl r]; set flow [read $fh]; close $fh
+@file(modus_atpg.tcl) 7: set flow [string map [list $GSC/timing/slow_vdd1v0_basicCells.lib $GSC/verilog/slow_vdd1v0_basicCells.v] $flow]
+@file(modus_atpg.tcl) 8: if {[catch {eval $flow} msg]} { puts "MODUS_FLOW_ERROR: $msg" }
+#@ Begin verbose source /opt/cadence/MODUS231/tools.lnx86/tb/bin/64bit/test_checks.tcl
+@file(/opt/cadence/MODUS231/tools.lnx86/tb/bin/64bit/test_checks.tcl) 4: proc check_log {infile}  {
+
+    global STOP_ON_MSG_SEV
+    global LOGDIR
+
+    set SEPARATOR "-------------------------------------------------------------------------------"
+
+    puts $SEPARATOR
+
+    if { [info exists LOGDIR] } {
+       # Get LOGDIR from global variable - Do Nothing
+    } else {
+       # Default value
+       set LOGDIR [get_db workdir]/testresults/logs
+    }
+
+    if { [info exists STOP_ON_MSG_SEV] } {
+       # Get STOP_ON_MSG_SEV from global variable
+
+       # Verify set to valid value
+        if { $STOP_ON_MSG_SEV eq "ERROR" } {
+           # Continue Valid
+       } elseif { $STOP_ON_MSG_SEV eq "WARNING_SEVERE" } {
+          # Continue Valid
+       } elseif { $STOP_ON_MSG_SEV eq "WARNING" } {
+          # Continue Valid
+       } else {
+          puts "ERROR: Global variable STOP_ON_MSG_SEV set to invalid value $STOP_ON_MSG_SEV. Valid values are WARNING, WARNING_SEVERE, or ERROR."
+          exit -1
+       }
+
+    } else {
+       # Do Nothing if global variable not set
+       puts "WARNING: check_log proc is ignored. STOP_ON_MSG_SEV not set. "
+       return 0
+    }
+
+
+   puts "Checking Log: $infile"
+
+   if [ file exists $LOGDIR/$infile ] {
+      #---------------------------------------------------
+      # tac   - Print file in reverse to allow only looking at last log if appended
+      # sed   - Stop printing when (TDA-009) found. Used to identify start of last log if logs are appended
+      # egrep - Lines conntaining "ERROR (???-???): ?..."
+      #
+      # egrep/grep uses its exit status to indicate presence/absence of a match. If no matches the exit status is 1
+      # Tcl's exec treats any non-zero exist status as an execption.
+      # Therfore a catch is used to store the results in a variable.
+      #
+      # Do not look for "ERROR" at start of line because "-log summary" includes only a summary which includes the number of messages first.
+      # The space detailed characters in the search string are intended to prevent detecting design nodes containing the string.
+      #---------------------------------------------------
+
+      # Always check for Errors (always stop on errors)
+      # matchStatus = 0 if command succeeded = found a match for egrep
+      set matchStatus [catch {exec tac $LOGDIR/$infile | sed -e {/(TDA-009):/q} | egrep {ERROR \([A-Z]+-[0-9]+\): .+}}]
+      if {$matchStatus == 0} {
+         puts "ERROR found. STOP_ON_MSG_SEVERITY exceeded. Processing Terminated."
+         exit -1
+      }
+      #--------------------------------------------------
+      # Check for Warning Severe if set to WARNING_SEVERE or WARNING (otherwise don't stop)
+      if {($STOP_ON_MSG_SEV eq "WARNING_SEVERE") || ($STOP_ON_MSG_SEV eq "WARNING")} {
+         set matchStatus [catch {exec tac $LOGDIR/$infile | sed -e {/(TDA-009):/q} | egrep {WARNING \([A-Z]+-[0-9]+\): \[Severe\] .+}}]
+         if {$matchStatus == 0} {
+            puts "WARNING \[Severe\] found. STOP_ON_MSG_SEVERITY exceeded. Processing Terminated."
+            exit -1
+         }
+      }
+      #---------------------------------------------------
+      # Check for Warning if set to Warning (otherwise don't stop)
+      if {$STOP_ON_MSG_SEV eq "WARNING"} {
+         set matchStatus [catch {exec tac $LOGDIR/$infile | sed -e {/(TDA-009):/q} | egrep {WARNING \([A-Z]+-[0-9]+\): .+}}]
+         if {$matchStatus == 0} {
+            puts "WARNING found. STOP_ON_MSG_SEVERITY exceeded. Processing Terminated."
+            exit -1
+         }
+      }
+      #---------------------------------------------------
+      # STOP_ON_MSG_SEV not exceeded, continue processing
+      puts "STOP_ON_MSG_SEVERITY not exceeded. Processing Continues."
+      puts $SEPARATOR
+      return 0
+
+   } else {
+       puts "ERROR: check_log unable to find specified log at $LOGDIR/$infile"
+       exit -1
+   }
+
+}
+#@ End verbose source /opt/cadence/MODUS231/tools.lnx86/tb/bin/64bit/test_checks.tcl
+INFO (TUI-772): The command 'build_model' will release the currently acquired resources. [end TUI_772] 
+
+Starting Command: build_model 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 23.12-s005_1, built Aug 15 2024 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg
+
+            -designtop crpm_top
+            -TECHLIB /opt/cadence/FOUNDRY/lan/flow/t1u1/reference_libs/GPDK045/gsclib045_svt_v4.4/gsclib045/verilog/slow_vdd1v0_basicCells.v
+            -allowmissingmodules yes
+            -LOGFILE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/testresults/logs/log_build_model_112026133103-024373000
+            -STDOUT summary
+            -messagecounteach 100
+            -DESIGNSOURCE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/crpm_top.test_netlist.v
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TEI-195): Build Model - Controller starting:  
+      1 INFO (TEI-196): Build Model - Hierarchical Model Build starting:  
+      1 INFO (TEI-197): Build Model - Hierarchical Model Build completed.  
+      1 INFO (TEI-198): Build Model - Flat Model Build starting:  
+      1 INFO (TEI-199): Build Model - Flat Model Build completed.   
+      1 INFO (TEI-200): Build Model - Controller completed.  
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      1 INFO (TLM-055): Design Summary
+
+  WARNING Messages...
+      3 WARNING (TEI-110): Pin 'v' of 'cell altos_latch' has no external net connection for any usage in the design. Cell contents file: '/opt/cadence/FOUNDRY/lan/flow/t1u1/reference_libs/GPDK045/gsclib045_svt_v4.4/gsclib045/verilog/slow_vdd1v0_basicCells.v'.   
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+Checking Log: log_build_model
+STOP_ON_MSG_SEVERITY not exceeded. Processing Continues.
+-------------------------------------------------------------------------------
+Starting Command: build_testmode 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 23.12-s005_1, built Aug 15 2024 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg
+            -TESTMODE FULLSCAN
+
+            -ASSIGNFILE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/crpm_top.FULLSCAN.pinassign
+          * update_assign_file=
+            -LOGFILE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/testresults/logs/log_build_testmode_FULLSCAN_112026133107-270734000
+            -MODEDEF FULLSCAN
+            -STDOUT summary
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      1 INFO (THM-814): Testmode contains 99.97% active logic,  0.03% inactive logic and  0.00% constraint logic.    
+      1 INFO (TTM-357): There are 1 scan chains which are controllable and observable.    
+      1 INFO (TTM-387): A default scanop sequence will be generated.    
+      1 INFO (TTM-391): A default modeinit sequence will be generated.    
+      1 INFO (TTM-800): build_testmode has created mode FULLSCAN.  
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+Checking Log: log_build_testmode_FULLSCAN
+STOP_ON_MSG_SEVERITY not exceeded. Processing Continues.
+-------------------------------------------------------------------------------
+Starting Command: report_test_structures 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 23.12-s005_1, built Aug 15 2024 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg
+            -TESTMODE FULLSCAN
+
+            -LOGFILE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/testresults/logs/log_report_test_structures_FULLSCAN_112026133113-107544000
+            -STDOUT summary
+            -reportscanchain all
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      1 INFO (TLM-055): Design Summary
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+Checking Log: log_report_test_structures_FULLSCAN
+STOP_ON_MSG_SEVERITY not exceeded. Processing Continues.
+-------------------------------------------------------------------------------
+Starting Command: verify_test_structures 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 23.12-s005_1, built Aug 15 2024 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg
+            -TESTMODE FULLSCAN
+
+            -messagecount TSV-016=10,TSV-024=10,TSV-315=10,TSV-027=10
+            -LOGFILE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/testresults/logs/log_verify_test_structures_FULLSCAN_112026133119-016602000
+            -STDOUT summary
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      1 INFO (TLM-055): Design Summary
+      1 INFO (TSV-068): The length of the longest scan chain is 335 bit positions, which is 100% of the average scan chain length 335 (based on 335 total scan chain bits and 1 valid scan chains).    
+      1 INFO (TSV-378): Scan chain beginning at 'pin scan_in' and ending at 'pin scan_out' is controllable and observable. The length of the scan chain is 335 bit positions.    
+      1 INFO (TSV-567): There are 1 controllable scan chains fed by Scan In (SI) primary inputs.    
+      1 INFO (TSV-568): There are 1 observable scan chains feeding to Scan Out (SO) primary outputs.    
+      1 INFO (TSV-569): There are 0 controllable scan chains fed by on-product Pattern Generator(s).    
+      1 INFO (TSV-570): There are 0 observable scan chains feeding to on-product Multiple-Input Signature Register (MISRs).    
+      1 INFO (TSV-900): verify_test_structures processing has started Fri Nov 20 13:31:19 2026     
+      1 INFO (TSV-908): verify_test_structures processing complete.    
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+Checking Log: log_verify_test_structures_FULLSCAN
+STOP_ON_MSG_SEVERITY not exceeded. Processing Continues.
+-------------------------------------------------------------------------------
+INFO (TUI-772): The command 'build_faultmodel' will release the currently acquired resources. [end TUI_772] 
+
+Starting Command: build_faultmodel 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 23.12-s005_1, built Aug 15 2024 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg
+
+            -LOGFILE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/testresults/logs/log_build_faultmodel_112026133124-871197000
+            -STDOUT summary
+            -includedynamic no
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TFM-099): Build Fault Model started.   
+      1 INFO (TFM-102): Creating faultModel file /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/tbdata/faultModel.   
+      1 INFO (TFM-103): Creating faultStatus file /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/tbdata/faultStatus.   
+      1 INFO (TFM-109): Build Fault Model has completed with highest level severity message of INFO.   
+      1 INFO (TFM-704): Maximum Global Test Coverage Statistics: 
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+Checking Log: log_build_faultmodel
+STOP_ON_MSG_SEVERITY not exceeded. Processing Continues.
+-------------------------------------------------------------------------------
+Starting Command: create_logic_tests 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 23.12-s005_1, built Aug 15 2024 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg
+            -TESTMODE FULLSCAN
+            -EXPERIMENT crpm_top_atpg
+
+            -LOGFILE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/testresults/logs/log_create_logic_tests_FULLSCAN_crpm_top_atpg_112026133129-093381000
+            -STDOUT summary
+[end TDA_009]
+INFO (TDA-220):   --- Tests ---   Faults     ---- ATCov ----   -- Faults --   - Elapsed Time -  [end TDA_220] 
+INFO (TDA-220):    Sim.    Eff.  Detected    Tmode    Global     Untested                       [end TDA_220] 
+INFO (TDA-220):      1       1       2698    19.63%   19.59%        11044           00:02.11    [end TDA_220] 
+INFO (TDA-220):   --- Tests ---   Faults     ---- ATCov ----   -- Faults --   - Elapsed Time -  [end TDA_220] 
+INFO (TDA-220):    Sim.    Eff.  Detected    Tmode    Global     Untested                       [end TDA_220] 
+INFO (TDA-220):      1       1        284    21.70%   21.66%        10760           00:02.13    [end TDA_220] 
+INFO (TDA-220):      2       2         60    22.14%   22.09%        10700           00:02.13    [end TDA_220] 
+INFO (TDA-220):   --- Tests ---   Faults     ---- ATCov ----   -- Faults --   - Elapsed Time -  [end TDA_220] 
+INFO (TDA-220):    Sim.    Eff.  Detected    Tmode    Global     Untested                       [end TDA_220] 
+INFO (TDA-220):     16      16       7923    79.80%   79.64%         2776           00:02.28    [end TDA_220] 
+INFO (TDA-220):     32      32       1089    87.72%   87.54%         1687           00:02.31    [end TDA_220] 
+INFO (TDA-220):     48      48        631    92.31%   92.13%         1056           00:02.33    [end TDA_220] 
+INFO (TDA-220):     64      64        517    96.08%   95.88%          539           00:02.34    [end TDA_220] 
+INFO (TDA-220):     80      80        142    97.11%   96.91%          397           00:02.35    [end TDA_220] 
+INFO (TDA-220):     96      96         72    97.63%   97.44%          325           00:02.36    [end TDA_220] 
+INFO (TDA-220):    112     112         62    98.09%   97.89%          263           00:02.37    [end TDA_220] 
+INFO (TDA-220):    118     118        228    99.75%   99.54%           35           00:02.38    [end TDA_220] 
+INFO (TDA-220):    119     118          0    99.75%   99.54%           35           00:02.38    [end TDA_220] 
+INFO (TDA-220):    123     122          6    99.79%   99.59%           29           00:02.38    [end TDA_220] 
+INFO (TDA-220):    124     122          0    99.79%   99.59%           29           00:02.38    [end TDA_220] 
+INFO (TDA-220):    125     122          0    99.79%   99.59%           29           00:02.38    [end TDA_220] 
+INFO (TDA-220):    126     122          0    99.79%   99.59%           29           00:02.38    [end TDA_220] 
+INFO (TDA-220):    127     122          0    99.79%   99.59%           29           00:02.40    [end TDA_220] 
+INFO (TDA-220):    128     122          0    99.79%   99.59%           29           00:02.40    [end TDA_220] 
+INFO (TDA-220):    129     122          0    99.79%   99.59%           29           00:02.40    [end TDA_220] 
+INFO (TDA-220):    130     122          0    99.79%   99.59%           29           00:02.40    [end TDA_220] 
+INFO (TDA-220):    131     122          0    99.79%   99.59%           29           00:02.40    [end TDA_220] 
+INFO (TDA-220):    132     122          0    99.79%   99.59%           29           00:02.40    [end TDA_220] 
+INFO (TDA-220):    132     122          0    99.81%   99.61%           26           00:02.41    [end TDA_220] 
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+     29 INFO (TDA-220):   --- Tests ---   Faults     ---- ATCov ----   -- Faults --   - Elapsed Time -   
+      1 INFO (TDA-221):    126     122          0    99.79%   99.59%           29           00:02.38     
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      6 INFO (TTC-110): Starting Scan Test generation                                                    
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+Checking Log: log_create_logic_tests_FULLSCAN_crpm_top_atpg
+STOP_ON_MSG_SEVERITY not exceeded. Processing Continues.
+-------------------------------------------------------------------------------
+Starting Command: write_toggle_gram 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 23.12-s005_1, built Aug 15 2024 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg
+            -TESTMODE FULLSCAN
+            -EXPERIMENT crpm_top_atpg
+
+            -LOGFILE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/testresults/logs/log_write_toggle_gram_FULLSCAN_crpm_top_atpg_112026133133-845228000
+            -STDOUT summary
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      5 INFO (TBM-054): Scan Shift Toggle report categorized by SEQUENCE  
+      1 INFO (TBM-088): The total number of test to be analyzed for scan is 125 and for capture is 124.  
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+
+  WARNING Messages...
+      1 WARNING (TBM-099):The switching percentage has exceeded the threshold value of 30 percent, in the current testmode. High switching can impact the power numbers at the tester.  
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+Starting Command: write_vectors 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 23.12-s005_1, built Aug 15 2024 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg
+            -TESTMODE FULLSCAN
+
+            -INEXPERIMENT crpm_top_atpg
+            -LOGFILE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/testresults/logs/log_write_vectors_FULLSCAN_crpm_top_atpg_112026133138-486680000
+            -STDOUT summary
+            -scanformat parallel
+          + -language verilog
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      1 INFO (TVE-001): Verilog write vectors started.    
+      1 INFO (TVE-002): Verilog write vectors has completed.    
+      4 INFO (TVE-003): Verilog write vectors output file will be: /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/testresults/verilog/cycleMap.FULLSCAN.crpm_top_atpg.    
+      2 INFO (TVE-004): Reading test section 1.1. Test section type equals scan.    
+      2 INFO (TVE-005): Created 674 total cycles, of which 4 are test cycles, 670 are scan cycles, 0 are dynamic timed cycles and 0 are dynamic cycles that are not timed.    
+      2 INFO (TVE-008): Created 335 total measures, of which 0 are PO measures and 335 are SO (Scan Out) measures.   
+      1 INFO (TVE-050):         TEST SEQUENCE COVERAGE ESTIMATE REPORT  
+      3 INFO (TVE-103): There was no specified TEST offset for this clock 'pin clk_ref_i'.  A default clock offset of 8.000000 ns will be used.    
+      1 INFO (TVE-967): Temporary output files are created in /tmp directory.  
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+Checking Log: log_write_vectors_FULLSCAN_crpm_top_atpg
+STOP_ON_MSG_SEVERITY not exceeded. Processing Continues.
+-------------------------------------------------------------------------------
+INFO (TUI-772): The command 'commit_tests' will release the currently acquired resources. [end TUI_772] 
+
+Starting Command: commit_tests 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 23.12-s005_1, built Aug 15 2024 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg
+            -TESTMODE FULLSCAN
+
+            -INEXPERIMENT crpm_top_atpg
+            -LOGFILE /home/2021hd402588g/cadence_chipin_work/soc_crpm_project/syn/out/atpg/testresults/logs/log_commit_tests_FULLSCAN_crpm_top_atpg_112026133142-574560000
+            -STDOUT summary
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TBD-805): File(s) generated (bytes and name):   
+      1 INFO (TBD-806): Input test vector File(s) (bytes, name):   
+      1 INFO (TBD-807): Experiment crpm_top_atpg odometers prior to commit_tests: 1.1.1.2.1 thru 1.2.1.12.4 (Relative test numbers 1 thru 125).   
+      1 INFO (TBD-809): Master test vector file statistics:     
+      1 INFO (TBD-810): Experiment crpm_top_atpg is saved to the master test vectors odometers: 1.1.1.2.1 to 1.2.1.12.4 (Relative test numbers 1 to 125).   
+      1 INFO (TBD-831): commit_tests completed successfully.   
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+Checking Log: log_commit_tests_FULLSCAN_crpm_top_atpg
+STOP_ON_MSG_SEVERITY not exceeded. Processing Continues.
+-------------------------------------------------------------------------------
+INFO (TFW-119): Modus checked in a Modus_common_ui license.  [end TFW_119] 

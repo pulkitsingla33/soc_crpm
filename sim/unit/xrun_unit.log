@@ -1,0 +1,79 @@
+xrun(64): 22.09-s003: (c) Copyright 1995-2022 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	22.09-s003: Started on Nov 20, 2026 at 13:21:36 IST
+xrun
+	-64bit
+	-sv
+	-timescale 1ns/1ps
+	-access +r
+	-nowarn DSEMEL
+	-nowarn DSEM2009
+	-svseed 1
+	-f ../../scripts/crpm_rtl.f
+		../../rtl/crpm_pkg.sv
+		../../rtl/crpm_cells.sv
+		../../rtl/crpm_rst_ctrl.sv
+		../../rtl/crpm_pmu.sv
+		../../rtl/crpm_regs.sv
+		../../rtl/crpm_top.sv
+	../../tb/crpm_sva.sv
+	../../tb/crpm_tb.sv
+	-top crpm_tb
+	-l xrun_unit.log
+Recompiling... reason: file '/home/2021hd402588g/cadence_chipin_work/soc_crpm_project/rtl/crpm_cells.sv' is newer than expected.
+	expected: Fri Nov 20 13:18:05 2026
+	actual:   Fri Nov 20 13:21:35 2026
+	Elaborating the design hierarchy:
+		Caching library 'worklib' ....... Done
+	Top level design units:
+		$unit_0x252ded4e
+		crpm_pkg
+		crpm_tb
+	Building instance overlay tables: .................... Done
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                 Instances  Unique
+		Modules:                14      10
+		Verilog packages:        1       1
+		Registers:             330     315
+		Scalar wires:          158       -
+		Vectored wires:         59       -
+		Always blocks:          96      92
+		Initial blocks:         29      29
+		Clocking blocks:         1       1
+		Parallel blocks:         2       2
+		Cont. assignments:      40      36
+		Pseudo assignments:    101     101
+		Assertions:             17      17
+		Compilation units:       1       1
+		Simulation timescale:  1ps
+	Writing initial simulation snapshot: worklib.crpm_tb:sv
+Loading snapshot worklib.crpm_tb:sv .................... Done
+SVSEED set from command line: 1
+xcelium> source /opt/cadence/XCELIUM2209/tools/xcelium/files/xmsimrc
+xcelium> run
+[0] ==== T1 power-on reset sequence
+    sys released  18 cycles after POR
+    periph        8 cycles after sys
+    core          9 cycles after periph
+[455000] ==== T2 registers
+[1156000] ==== T3 clock dividers
+[5026000] ==== T4 random divider changes (glitch check)
+xmsim: *W,OLDURR: The default algorithm for $urandom_range and randcase is used. It can have distribution problems..
+[12695000] ==== T5 software clock enables
+[13805000] ==== T6 IDLE mode + wake masking
+[17256000] ==== T7 SLEEP power-down / power-up
+[31416000] ==== T8 DEEP sleep
+[35206000] ==== T9 software reset
+[35836000] ==== T10 watchdog
+[49436000] ==== T11 external reset pin
+[51886000] ==== T12 DFT test mode
+
+==================================================================
+ CRPM block test : 262 checks, 0 errors, 0 clock glitches
+ RESULT: *** TEST PASSED ***
+==================================================================
+Simulation complete via $finish(1) at time 54015 NS + 0
+/home/2021hd402588g/cadence_chipin_work/soc_crpm_project/tb/crpm_tb.sv:536     $finish;
+xcelium> exit
+TOOL:	xrun(64)	22.09-s003: Exiting on Nov 20, 2026 at 13:21:40 IST  (total: 00:00:04)
