@@ -1,1 +1,107 @@
-docs/
+# ---------------------------------------------------------------------------
+# Docs: only the final presentation and report are tracked
+# ---------------------------------------------------------------------------
+docs/*
+
+# ---------------------------------------------------------------------------
+# Ibex RTL comes from soc_lab4 through a symlink on the server
+# ---------------------------------------------------------------------------
+/ibex
+
+# ---------------------------------------------------------------------------
+# Cadence Xcelium / SimVision
+# ---------------------------------------------------------------------------
+xcelium.d/
+INCA_libs/
+*.shm/
+*.trn
+*.dsn
+.simvision/
+simvision*.diag
+xrun.history
+xrun.key
+irun.history
+irun.key
+*.history
+waves.shm/
+cov_work/
+.reinvoke.sim
+*.ucdb
+
+# ---------------------------------------------------------------------------
+# Cadence Genus / Modus / Innovus scratch output
+# ---------------------------------------------------------------------------
+genus.cmd*
+genus.log*
+!syn/genus_crpm.log
+fv/
+rc_model.bin
+.cadence/
+*.cmd~
+modus.log*
+!syn/modus_run.log
+tbdata/
+testresults/
+*.tbdata
+.modus*
+innovus.cmd*
+innovus.log*
+*.lck
+cds.lib
+hdl.var
+*.err
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ---------------------------------------------------------------------------
+# Editors / IDEs
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+\#*\#
+.#*
+
+# ---------------------------------------------------------------------------
+# Windows junk
+# ---------------------------------------------------------------------------
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+# Office lock / temp files
+~$*
+
+# ---------------------------------------------------------------------------
+# macOS junk
+# ---------------------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
