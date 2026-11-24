@@ -2,6 +2,8 @@
 # Docs: only the final presentation and report are tracked
 # ---------------------------------------------------------------------------
 docs/*
+!docs/Group_7_CRPM_Presentation.pptx
+!docs/Group_7_CRPM_Report.pdf
 
 # ---------------------------------------------------------------------------
 # Ibex RTL comes from soc_lab4 through a symlink on the server
